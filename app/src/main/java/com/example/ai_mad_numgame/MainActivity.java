@@ -30,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
     int []performance={-1,-1,-1,-1,-1,-1}; //score of a game is updated in this array
     int []score={-1,-1,-1}; //score of each match is updated in this array. A total of three matches in a game
     String operators[]={"+","-","*","/"};
-    int correctButton=0; //which button will have the correct answer (tag of that button)
-    Random random=new Random(); //You will generate randdom alegebra questions
+    Random random=new Random();
+    int correctButton= random.nextInt(4); //which button will have the correct answer (tag of that button)
+     //You will generate randdom alegebra questions
     TextView textView2;
     Button button1,button2,button3,button4;
     public void load(View view){
@@ -72,22 +73,66 @@ public class MainActivity extends AppCompatActivity {
     public void newMatch() {  //A game is composed of three matches
 
         int operand1 = random.nextInt(10);
-        int operand2=0;
+        int operand2=random.nextInt(10);
         //check is operand2 is not zero; otherwise in case of division-divide by zero error will come
         String operator = operators[random.nextInt(4)];
+        int correctanswer = -100;
         textView2.setText(operand1 + operator + operand2);
+        if(operator.equals("+"))
+        {
+            correctanswer = operand1+operand2;
+        }
+        else if(operator.equals("-"))
+        {
+            correctanswer = operand1-operand2;
+        }
+        else if(operator.equals("*"))
+        {
+            correctanswer = operand1*operand2;
+        }
+        else if(operator.equals("/"))
+        {
+            correctanswer = operand1/operand2;
+        }
+        int ans=-100;
+        if(correctButton == 0 ) {
+            button1.setText(ans+"");
+            button2.setText(operand1  + " ");
+            button3.setText(operand1  + "");
+            button4.setText(operand1  + operator + operand2);
+        }
+        else if(correctButton== 1 ){
+            button1.setText(operand1  + " ");
+            button2.setText(ans+ " ");
+            button3.setText(operand1  + "");
+            button4.setText(operand1  + operator + operand2);
+        }
+        else if(correctButton== 2 ){
+            button1.setText(operand1  + " " );
+            button2.setText(operand1  + " ");
+            button3.setText(ans+ " ");
+            button4.setText(operand1  + operator + operand2);
+        }
+        else {
+            //button1.setText(ans);
+            button1.setText(operand1  + " " );
+            button2.setText(operand1 + " ");
+            button3.setText(operand1 + "");
+            button4.setText(ans+ " ");
+        }
+        button1.setText(operand1+operand2+"");
+        button2.setText(operand1-operand2+"");
+        button3.setText(operand1*operand2+"");
+        button4.setText(operand1/operand2+"");
+        if(matchCounter==3) {    // if three matches are completed updatee the perfomrance in sharedpreferences
 
-      // Your code here, to diplay correct and incorrect options on the buttons
+            matchCounter = 0;
 
-        if(matchCounter==3){    // if three matches are completed updatee the perfomrance in sharedpreferences
-
-            matchCounter=0;
-
-            for(int i=0;i<performance.length-1;i++){ //adjusting the performance array so that last six entries present with the most recent at the last index.
-                performance[i]=performance[i+1];
+            for (int i = 0; i < performance.length - 1; i++) { //adjusting the performance array so that last six entries present with the most recent at the last index.
+                performance[i] = performance[i + 1];
             }
-            performance[5]=sumOfScore(); //calculating the sum of last three matches (note result of a match is 1 ro 0, and add to performance
-            sharedPreferences.edit().putString("data",new Gson().toJson(performance)).apply();
+            performance[5] = sumOfScore(); //calculating the sum of last three matches (note result of a match is 1 ro 0, and add to performance
+            sharedPreferences.edit().putString("data", new Gson().toJson(performance)).apply();
 
         }
     }
@@ -95,7 +140,9 @@ public class MainActivity extends AppCompatActivity {
     public int sumOfScore(){
         //Computing the sum of score array, which has the 1 or in each index,depending on correct or incorrect answers
         int sum=0;
-       // your code here
+        int i;
+        for(i=0; i<score.length; i++)
+            sum+=score[i];
         return sum;
     }
 
