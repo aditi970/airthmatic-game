@@ -159,7 +159,20 @@ public class MainActivity extends AppCompatActivity {
         return dataFrame;
     }
 
-    public String getInterpretation(int [][]dataFrame,double slope){
+    public String getInterpretation(int [][]dataFrame,double slope)
+    {
+        if(slope>0 && slope<0.5)
+        {
+            return "you are getting sincere";
+        }
+        else if (slope>0.5)
+        {
+            return "You are sincere";
+        }
+        else if(slope<0)
+        {
+            return " not sincere"
+        }
        //provide interpretation based on your slope analysis
         // Your code here
         return "Your Interpretation";
